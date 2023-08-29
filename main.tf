@@ -19,11 +19,6 @@ variable "server_port" {
   default = 8080
 }
 
-output "public_ip" {
-  value = aws_instance.example.public_ip
-  description = "The public IP address of the web server"
-}
-
 resource "aws_launch_configuration" "example" {
   image_id = "ami-0989fb15ce71ba39e"
   instance_type = "t3.micro"
