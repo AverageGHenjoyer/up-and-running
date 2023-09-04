@@ -104,7 +104,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
-resource "aws_lb_target_group" "asg" {
+resource "aws_lb_target_group" "asg"  {
   name = "terraform-asg-example"
   port = var.server_port
   protocol = "HTTP"
@@ -119,4 +119,24 @@ resource "aws_lb_target_group" "asg" {
     healthy_threshold = 2
     unhealthy_threshold = 2
   }
+}
+
+resource "aws_lb_listener_rule" "asg" {
+  listener_arn = aws_lb_listener.http.arn
+  priority = 100
+
+  condition {
+    path_pattern {
+      values = ["*"]
+    }
+  }
+
+  action {
+    type = "forward"
+    target_group_arn = aws_lb_target_group.asg.arn
+  }
+}
+output "alb_dns_name" {
+  value = aws_lb.example.dns_name
+  description = "The domain name of the load balancer"
 }
